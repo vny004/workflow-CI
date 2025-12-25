@@ -1,0 +1,37 @@
+name: CI - Train MLflow Project
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "MLProject/**"
+      - ".github/workflows/ci-train.yml"
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -U pip
+          pip install mlflow pandas scikit-learn
+
+      - name: Run MLflow Project
+        run: |
+          cd MLProject
+          mlflow run . -P data_path=data/heart_preprocessed.csv
+
+      - name: Upload MLflow runs (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlruns
+          path: MLProject/mlruns
