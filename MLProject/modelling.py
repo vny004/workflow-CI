@@ -8,8 +8,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
 def main(data_path: str):
-    mlflow.set_tracking_uri("file:./mlruns")
-    mlflow.set_experiment("heart-ci-training")
     mlflow.sklearn.autolog()
 
     df = pd.read_csv(data_path)
